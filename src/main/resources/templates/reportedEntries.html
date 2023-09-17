@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Admin Page</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f5f5f5;
+			margin: 0;
+			padding: 0;
+		}
+
+
+
+		h1 {
+			font-size: 24px;
+			color: #333;
+			margin-bottom: 20px;
+			text-align: center;
+			padding-top: 20px;
+		}
+
+
+
+		table {
+			width: 80%;
+			margin: 0 auto;
+			border-collapse: collapse;
+			background-color: #fff;
+			border: 1px solid #ccc;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			margin-bottom: 30px;
+		}
+
+
+
+		th,
+		td {
+			padding: 10px;
+			text-align: left;
+		}
+
+
+
+		th {
+			background-color: #007bff;
+			color: #fff;
+		}
+
+
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+
+
+		tr:hover {
+			background-color: #ddd;
+		}
+
+
+
+		button {
+			padding: 5px 10px;
+			background-color: #d9534f;
+			color: #fff;
+			border: none;
+			cursor: pointer;
+		}
+
+
+
+		button:hover {
+			background-color: #c9302c;
+		}
+
+		.alert {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			padding: 20px;
+			background-color: #ffffff;
+			border: 1px solid #ccc;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+
+
+		.show-dialog {
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+	<div th:if="${Commentmessage}" class="alert">
+		<p th:text="${Commentmessage}"></p>
+	</div>
+	<h1>Reported Comments</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Comment Content</th>
+				<th>Reason</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="reportedComment : ${reportedComments}">
+				<td th:text="${reportedComment.id}"></td>
+				<td th:text="${reportedComment.commentContent}"></td>
+			   <td th:text="${reportedComment.reportReason}">Reason</td>
+				<td>
+					<form method="post" th:action="@{/Admin/delete-comment}" th:object="${reportedComment}">
+						<input type="hidden" name="commentId" th:value="${reportedComment.id}" />
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</form>
+					<form method="post" th:action="@{/Admin/ignore}" >
+					    <input type="hidden" name="commentId" th:value="${reportedComment.id}"/>
+						<button type="submit">Ignore</button>
+					</form>
+  
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<hr>
+	<div th:if="${message}" class="alert">
+		<p th:text="${message}"></p>
+	</div>
+	<h1>Reported Posts</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>Post ID</th>
+				<th>Post Content</th>
+				<th>Reason</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="reportedPost : ${reportedPosts}">
+				<td th:text="${reportedPost.postId}">Post ID</td>
+				<td th:text="${reportedPost.postContent}">Post Content</td>
+				<td th:text="${reportedPost.reportReason}">Reason</td>
+				<td>
+					<form th:action="@{/Admin/delete-post}" method="post">
+						<input type="hidden" name="postId" th:value="${reportedPost.postId}" />
+						<button type="submit">Delete Post</button>
+					</form>
+					<form method="post" th:action="@{/Admin/ignore/post}" >
+					    <input type="hidden" name="postId" th:value="${reportedPost.postId}"/>
+						<button type="submit">Ignore</button>
+					</form>
+					 
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+		var alertElement = document.querySelector('.alert');
+
+
+
+		if (alertElement) {
+			setTimeout(function () {
+				alertElement.classList.add('show-dialog');
+
+
+
+				setTimeout(function () {
+					alertElement.classList.remove('show-dialog');
+				}, 2000);
+			}, 500);
+		}
+	});
+</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Admin Page</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Reported Comments</h1>-->
+
+<!--    <table>-->
+<!--        <thead>-->
+<!--            <tr>-->
+<!--                <th>ID</th>-->
+<!--                <th>Comment Content</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+
+<!--            <tr th:each="reportedComment : ${reportedComments}">-->
+<!--                <td th:text="${reportedComment.id}"></td>-->
+<!--                <td th:text="${reportedComment.commentContent}"></td>-->
+<!--                <td>-->
+<!--    <form method="post" th:action="@{/Admin/delete-comment}" th:object="${reportedComment}">-->
+<!--    <input type="hidden" name="commentId" th:value="${reportedComment.id}" />-->
+<!--    <button type="submit" class="btn btn-danger">Delete</button>-->
+<!--</form>-->
+<!--        </td>-->
+<!--            </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!-- <hr>-->
+<!-- <h1>Reported Posts</h1>-->
+<!--    <table>-->
+<!--        <thead>-->
+<!--            <tr>-->
+<!--                <th>Post ID</th>-->
+<!--                <th>Post Content</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--            <tr th:each="reportedPost : ${reportedPosts}">-->
+<!--                <td th:text="${reportedPost.postId}">Post ID</td>-->
+<!--                <td th:text="${reportedPost.postContent}">Post Content</td>-->
+<!--                <td>-->
+<!--                    <form th:action="@{/Admin/delete-post}" method="post">-->
+<!--                        <input type="hidden" name="postId" th:value="${reportedPost.postId}" />-->
+<!--                        <button type="submit">Delete Post</button>-->
+<!--                    </form>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </tbody>-->
+<!--        </table>-->
+
+<!--</body>-->
+<!--</html>-->

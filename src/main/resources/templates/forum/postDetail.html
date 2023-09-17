@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<meta charset="UTF-8">
+
+	<title>Blog Post</title>
+
+	<style>
+		body {
+
+			font-family: Arial, sans-serif;
+
+			background-color: #f5f5f5;
+
+			margin: 0;
+
+			padding: 0;
+
+		}
+
+		.container {
+
+			max-width: 800px;
+
+			margin: 0 auto;
+
+			padding: 20px;
+
+			background-color: #fff;
+
+			border: 1px solid #ccc;
+
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+		}
+
+
+
+		h1 {
+
+			font-size: 24px;
+
+			color: #333;
+
+			margin-bottom: 20px;
+
+		}
+
+
+
+		p {
+
+			font-size: 16px;
+
+			color: #555;
+
+			margin-bottom: 10px;
+
+		}
+
+		.post-content {
+
+			font-size: 18px;
+
+			color: #333;
+
+			line-height: 1.4;
+
+			margin-bottom: 20px;
+
+		}
+
+		.posted-on {
+
+			font-size: 14px;
+
+			color: #777;
+
+			position: relative;
+
+		}
+
+
+
+		.posted-on:before {
+
+			content: '\2022';
+			/* Bullet character */
+
+			font-size: 8px;
+
+			margin-right: 6px;
+
+			color: #007bff;
+			/* Bullet color */
+
+			position: absolute;
+
+			top: 50%;
+
+			left: -12px;
+
+			transform: translateY(-50%);
+
+		}
+
+
+		.likes {
+
+			font-size: 18px;
+
+			color: #007bff;
+
+			font-weight: bold;
+
+		}
+
+
+
+		.comment {
+
+			border: 1px solid #ddd;
+
+			padding: 10px;
+
+			margin: 10px 0;
+
+			background-color: #f9f9f9;
+
+		}
+
+
+
+		.comment h3 {
+
+			font-size: 16px;
+
+			color: #333;
+
+			margin-bottom: 5px;
+
+		}
+
+		.comment p {
+
+			font-size: 14px;
+
+			color: #444;
+
+			margin-bottom: 10px;
+
+		}
+
+
+
+		.timestamp {
+
+			font-size: 12px;
+
+			color: #777;
+
+		}
+
+
+
+		.btn {
+
+			padding: 5px 10px;
+
+			background-color: #007bff;
+
+			color: #fff;
+
+			border: none;
+
+			cursor: pointer;
+
+			margin-top: 5px;
+
+		}
+
+
+
+		.btn-danger {
+
+			background-color: #d9534f;
+
+		}
+		 
+
+ 
+
+ 
+	</style>
+
+</head>
+
+<body th:object="${post}">
+
+	<div class="container">
+
+		<h1>Blog Post by <span th:text="*{author.name}">John Doe</span></h1>
+
+
+
+		<p> Post Content -</p>
+
+		<p class="post-content" th:text="*{content}">This is a blog post.</p>
+
+		<p class="likes">Likes: <span th:text="${likeCount}">0</span></p>
+
+		<form method="post" action="#" th:action="@{/forum/post/{id}/like(id = ${post.id})}">
+
+			<input type="hidden" th:name="likerName" th:value="${likerName}">
+
+			<button type="submit" class="btn">Like!</button>
+
+		</form>
+
+		<form th:action="@{/Admin/post/{id}/report(id = ${post.id})}" method="post">
+
+			<input type="hidden" name="postContent" th:value="${post.content}" />
+ <label for="reportReason">Select Report Reason:</label>
+    <select id="reportReason" name="reportReason">
+        <option value="spam">Spam</option>
+        <option value="inappropriate">Inappropriate Content</option>
+        <option value="other">Other</option>
+    </select>
+			<button type="submit" class="btn btn-danger">Report</button>
+
+		</form>
+
+		<hr>
+
+		<form th:action="@{/forum/post/{postId}/comment/add(postId=${post.id})}" method="post">
+
+			<div class="form-group">
+
+				<label for="content">Add a Comment:</label>
+
+				<textarea id="content" name="content" class="form-control" rows="4" required></textarea>
+
+			</div>
+
+			<button type="submit" class="btn btn-primary">Add Comment</button>
+
+		</form>
+
+	 
+
+		<h2>Comments</h2>
+
+		<div th:each="comment : ${post.comments}" class="comment">
+
+			<p>Commented by -</p>
+
+			<h3 th:text="${comment.user.name}">User Name</h3>
+
+			<p>Comment Content -</p>
+
+			<p th:text="${comment.content}"></p>
+
+			<p class="timestamp" th:text="${#dates.format(comment.date, 'yyyy-MM-dd HH:mm:ss')}">Timestamp</p>
+
+			<form th:action="@{/Admin/post/{postId}/comment/report(postId = ${post.id})}" method="post">
+
+				<input type="hidden" name="commentId" th:value="${comment.id}" />
+
+				<input type="hidden" name="commentContent" th:value="${comment.content}" /><label for="reportReason">Select Report Reason:</label>
+    <select id="reportReason" name="reportReason">
+        <option value="spam">Spam</option>
+        <option value="inappropriate">Inappropriate Content</option>
+        <option value="other">Other</option>
+    </select>
+
+				<button type="submit" class="btn btn-danger">Report</button>
+
+			</form>
+
+		</div>
+
+	</div>
+	 
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<meta charset="UTF-8">     -->
+<!--<title>Blog post</title>-->
+<!--</head>-->
+<!--<body th:object="${post}">-->
+<!--	<h1>Post by <span th:text="*{author.name}">John Doe</span></h1>-->
+<!--	<p th:text="*{content}">This is a post.</p>-->
+<!--	<p>Likes: <span th:text="${likeCount}">0</span></p>-->
+<!--	<form method="post" action="#" th:action="@{/forum/post/{id}/like(id = ${post.id})}">-->
+<!--		<input type="hidden" th:name="likerName" th:value="${likerName}">-->
+<!--		<input type="submit" value="Like!">-->
+<!--	</form>-->
+<!--   <form th:action="@{/Admin/post/{postId}/report(postId = ${post.id})}" method="post">-->
+<!--  <input type="hidden" name="postContent" th:value="${post.content}" />-->
+<!--  <button type="submit" class="btn btn-danger">Report</button>-->
+<!--	</form>-->
+
+<!--	  <hr>-->
+<!--   <form th:action="@{/forum/post/{postId}/comment/add(postId=${post.id})}" method="post">-->
+<!--    <div class="form-group">-->
+<!--        <label for="content">Comment:</label>-->
+<!--        <textarea id="content" name="content" class="form-control" rows="4" required></textarea>-->
+<!--    </div>-->
+<!--    <button type="submit" class="btn btn-primary">Add Comment</button>-->
+<!--</form>-->
+
+
+
+<!-- <h2> Comments</h2>-->
+<!-- <div th:each="comment : ${post.comments}">-->
+<!--     Display comment content here -->
+<!--    <p th:text="${comment.content}"></p>-->
+<!--    <p>Comment by <span th:text="${comment.user.name}">User Name</span></p>-->
+<!--     <p>Timestamp: <span th:text="${#dates.format(comment.date, 'yyyy-MM-dd HH:mm:ss')}">Timestamp</span></p>-->
+<!--     Add a report button with comment id and content as parameters -->
+<!--    <form th:action="@{/Admin/post/{postId}/comment/report(postId = ${post.id})}" method="post">-->
+<!--        <input type="hidden" name="commentId" th:value="${comment.id}" />-->
+<!--        <input type="hidden" name="commentContent" th:value="${comment.content}" />-->
+
+<!--        <button type="submit" class="btn btn-danger">Report</button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,128 @@
+ 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Analytics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<header style="background-color: #333; color: #fff; text-align: center; padding: 20px;">
+<h1>Welcome to the Analytics Page</h1>
+</header>
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+<section style="background-color: #fff; border: 1px solid #ddd; border-radius: 5px; padding: 20px;">
+<h2 style="color: #333; font-size: 24px;">Analytics</h2>
+<p>Number of Posts Created Today: <span th:text="${postCountToday}" style="font-weight: bold; color: green;"></span></p>
+<p>Number of Posts Created this Month: <span th:text="${postCountMonth}" style="font-weight: bold; color: blue;"></span></p>
+<p>Number of Posts Created this Year: <span th:text="${postCountYear}" style="font-weight: bold; color: red;"></span></p>
+ <p>Number of Comments Created Today: <span th:text="${commentCountToday}"style="font-weight: bold; color:green;"></span></p>
+<p>Number of Comments Created this Year: <span th:text="${commentCountYear}" style="font-weight: bold; color: orange;"></span></p>
+</section>
+</div> 
+
+
+
+    <div style="width: 400px; height: 400px;">
+        <canvas id="barChart"></canvas>
+    </div>
+
+<div style="width: 400px; height: 400px;">
+        <canvas id="pieChart"></canvas>
+    </div>
+<input hidden="true" id="tod" th:value="${postCountToday}">
+<input hidden="true" id="mon" th:value="${postCountMonth}">
+<input hidden="true" id="all" th:value="${postCountYear}">
+<input hidden="true" id="today" th:value="${commentCountToday}">
+<input hidden="true" id="month" th:value="${commentCountYear}">
+ 
+<script>
+const xValues = ["Today", "Month","Year"];
+const x1Values = ["Today", "Year"];
+const y1 = parseInt(document.getElementById("tod").value);
+const y2 = parseInt(document.getElementById("mon").value);
+const y3 = parseInt(document.getElementById("all").value);
+const y4 = parseInt(document.getElementById("today").value);
+const y5 = parseInt(document.getElementById("month").value);
+ 
+const barData = [y1, y2, y3];
+const pieData = [y4,y5];
+const colors = ["red", "green", "blue"];
+new Chart("barChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: colors,
+      data: barData
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Bar-Chart Posts Data"
+    }
+  }
+});
+ 
+  new Chart("pieChart", {
+    type: "pie",  
+    data: {
+      labels: x1Values,
+      datasets: [
+        {
+          backgroundColor: colors,
+          data:pieData
+        },
+      ],
+    },
+    options: {
+      legend: { display:true }, 
+      title: {
+        display: true,
+        text: "PIeChart Comments Data",
+      },
+    },
+  });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+
+<!--<html lang="en">-->
+
+<!--<head>-->
+
+<!--    <meta charset="UTF-8">-->
+
+<!--    <title>Analytics</title>-->
+
+<!--</head>-->
+
+<!--<body>-->
+
+<!--    <h1>Welcome to the Analytics Page</h1>-->
+
+<!--    <p>Number of Posts Created Today: <span th:text="${postCountToday}"></span></p>-->
+
+<!--    <p>Number of Posts Created this Month: <span th:text="${postCountMonth}"></span></p>-->
+
+<!--    <p>Number of Posts Created this Year: <span th:text="${postCountYear}"></span></p>-->
+
+    
+<!--    <p>Number of Comments Created Today: <span th:text="${commentCountToday}"></span></p>-->
+    
+<!--    <p>Number of Comments Created this Year: <span th:text="${commentCountYear}"></span></p>-->
+
+<!--</body>-->
+
+<!--</html>-->
